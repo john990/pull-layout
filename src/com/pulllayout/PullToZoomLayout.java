@@ -1,81 +1,47 @@
 package com.pulllayout;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.widget.AbsListView;
+import android.view.View;
 
 /**
  * Created by kai.wang on 3/17/14.
  */
-abstract class PullToZoomLayout extends PullBase {
+public class PullToZoomLayout extends PullToZoomBase {
     private float downY = 0.0f;
+
+    private View headerView;
+    private int headerHeight;
+
+    protected int maxHeight;
 
     public PullToZoomLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.pull);
+        int layout = a.getResourceId(R.styleable.pull_header, 0);
+        maxHeight = a.getLayoutDimension(R.styleable.pull_maxHeight,0);
+        a.recycle();
+        if (layout == 0) {
+            throw new RuntimeException("PullToZoomLayout haven't header view.");
+        }
+        if(maxHeight == 0){
+            throw new RuntimeException("PullToZoomLayout maxHeight must be set.");
+        }
+
+        headerView = LayoutInflater.from(context).inflate(layout, null);
+        addHeaderView(headerView);
+        headerHeight = getHeaderHeight();
     }
 
-    /**
-     * call this method when moving
-     * @param distance moving distance
-     * @param upwards is upwards?
-     * @param release is release?
-     */
-    public abstract void move(int distance, boolean upwards, boolean release);
 
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        boolean result = false;
-        if(contentView == null){
-            return true;
+    public void move(int distance, boolean upwards, boolean release) {
+        if(headerView.getHeight() > headerHeight){
+
         }
-        int action = ev.getAction();
-        if (action == MotionEvent.ACTION_DOWN) {
-            downY = ev.getRawY();
-        } else if (action == MotionEvent.ACTION_MOVE) {
-            if (containAbsListView && ((AbsListView)contentView).getFirstVisiblePosition() == 0) {
-                // (header正在显示 || 没显示并且向下拉) && 滑动距离大于10
-                if ((headerShowing || downY - ev.getRawY() < 0) && Math.abs(downY - ev.getRawY()) > 10) {
-                    result = true;
-                }
-            } else {
-                headerShowing = false;
-            }
-        }
-        return result;
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        int action = event.getAction();
-        if (action == MotionEvent.ACTION_DOWN && contentView.getHeight() < getHeight()) {
-            return true;
-        } else if (action == MotionEvent.ACTION_MOVE) {
-            computeTravel(event, false);
-            downY = event.getRawY();
-            return true;
-        } else if (action == MotionEvent.ACTION_UP) {
-            computeTravel(event, true);
-        }
-        return super.onTouchEvent(event);
-    }
-
-    /**
-     * 计算并调整header显示的高度
-     *
-     * @param ev
-     * @param actionUp
-     */
-    private void computeTravel(MotionEvent ev, boolean actionUp) {
-        float movingY = ev.getRawY();
-        int travel = (int) ((downY - movingY) / 2);
-        boolean up = travel > 0;
-        travel = Math.abs(travel);
-
-        if (containAbsListView && ((AbsListView)contentView).getChildCount() != 0 && ((AbsListView)contentView).getChildAt(0).getTop() != 0) {
-            ((AbsListView)contentView).setSelection(0);
-        }
-
-        move(travel, up, actionUp);
-    }
 }

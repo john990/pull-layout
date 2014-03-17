@@ -3,15 +3,14 @@ package com.pulllayout;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.widget.AbsListView;
 
 /**
  * Created by kai.wang on 3/17/14.
  */
-abstract class PullToShowLayout extends PullBase {
+abstract class PullToZoomBase extends PullBase {
     private float downY = 0.0f;
 
-    public PullToShowLayout(Context context, AttributeSet attrs) {
+    public PullToZoomBase(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -33,13 +32,8 @@ abstract class PullToShowLayout extends PullBase {
         if (action == MotionEvent.ACTION_DOWN) {
             downY = ev.getRawY();
         } else if (action == MotionEvent.ACTION_MOVE) {
-            if (containAbsListView && ((AbsListView)contentView).getFirstVisiblePosition() == 0) {
-                // (header正在显示 || 没显示并且向下拉) && 滑动距离大于10
-                if ((headerShowing || downY - ev.getRawY() < 0) && Math.abs(downY - ev.getRawY()) > 10) {
-                    result = true;
-                }
-            } else {
-                headerShowing = false;
+            if (headerShowing) {
+                result = true;
             }
         }
         return result;
@@ -48,7 +42,7 @@ abstract class PullToShowLayout extends PullBase {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();
-        if (action == MotionEvent.ACTION_DOWN && contentView.getHeight() < getHeight()) {
+        if (action == MotionEvent.ACTION_DOWN) {
             return true;
         } else if (action == MotionEvent.ACTION_MOVE) {
             computeTravel(event, false);
@@ -71,10 +65,6 @@ abstract class PullToShowLayout extends PullBase {
         int travel = (int) ((downY - movingY) / 2);
         boolean up = travel > 0;
         travel = Math.abs(travel);
-
-        if (containAbsListView && ((AbsListView)contentView).getChildCount() != 0 && ((AbsListView)contentView).getChildAt(0).getTop() != 0) {
-            ((AbsListView)contentView).setSelection(0);
-        }
 
         move(travel, up, actionUp);
     }
