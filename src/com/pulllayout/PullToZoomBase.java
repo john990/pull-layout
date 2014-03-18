@@ -62,7 +62,7 @@ abstract class PullToZoomBase extends PullBase {
      */
     private void computeTravel(MotionEvent ev, boolean actionUp) {
         float movingY = ev.getRawY();
-        int travel = (int) ((downY - movingY) / 2);
+        int travel = (int) (downY - movingY);
         boolean up = travel > 0;
         travel = Math.abs(travel);
 

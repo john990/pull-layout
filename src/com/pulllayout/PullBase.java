@@ -29,14 +29,43 @@ class PullBase extends LinearLayout{
     }
 
     protected void addHeaderView(View headerView) {
+        addHeaderView(headerView,0);
+    }
+
+    protected void addHeaderView(View headerView,int height) {
         this.headerView = headerView;
-        addView(headerView);
-        measureHeader(headerView);
+        addView(headerView,0);
+        measureHeader(headerView,height);
         headerViewHeight = headerView.getMeasuredHeight();
         LayoutParams p = (LayoutParams) headerView.getLayoutParams();
-        p.topMargin = -headerViewHeight;
+//        p.topMargin = -headerViewHeight;
 
         currentHeaderMargin = -headerViewHeight;
+    }
+
+    /**
+     * measure header view's width and height
+     *
+     * @param headerView
+     */
+    private void measureHeader(View headerView,int height) {
+        LayoutParams p = (LayoutParams) headerView.getLayoutParams();
+        if (p == null) {
+            int h = height == 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : height;
+            p = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, h);
+        }else if(height != 0){
+            p.height = height;
+        }
+        headerView.setLayoutParams(p);
+        int childWidthSpec = ViewGroup.getChildMeasureSpec(0, 0, p.width);
+        int lpHeight = p.height;
+        int childHeightSpec;
+        if (lpHeight > 0) {
+            childHeightSpec = MeasureSpec.makeMeasureSpec(lpHeight, MeasureSpec.EXACTLY);
+        } else {
+            childHeightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+        }
+        headerView.measure(childWidthSpec, childHeightSpec);
     }
 
     public void hideHeader() {
@@ -73,28 +102,6 @@ class PullBase extends LinearLayout{
 
     protected View getContentView() {
         return contentView;
-    }
-
-    /**
-     * measure header view's width and height
-     *
-     * @param headerView
-     */
-    private void measureHeader(View headerView) {
-        LayoutParams p = (LayoutParams) headerView.getLayoutParams();
-        if (p == null) {
-            p = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        }
-        headerView.setLayoutParams(p);
-        int childWidthSpec = ViewGroup.getChildMeasureSpec(0, 0, p.width);
-        int lpHeight = p.height;
-        int childHeightSpec;
-        if (lpHeight > 0) {
-            childHeightSpec = MeasureSpec.makeMeasureSpec(lpHeight, MeasureSpec.EXACTLY);
-        } else {
-            childHeightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
-        }
-        headerView.measure(childWidthSpec, childHeightSpec);
     }
 
     /**
