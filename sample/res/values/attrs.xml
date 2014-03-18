@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<declare-styleable name="pull">
+		<attr name="header" format="reference|integer" />
+		<attr name="maxHeight" format="reference|dimension" />
+		<attr name="minHeight" format="reference|dimension" />
+		<attr name="autoHideHeader" format="reference|boolean" />
+	</declare-styleable>
+</resources>
