@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  xmlns:pull="http://schemas.android.com/apk/res-auto"
+			  android:orientation="vertical"
+			  android:layout_width="fill_parent"
+			  android:layout_height="fill_parent">
+
+
+		<com.pulllayout.PullToZoomLayout
+			android:id="@+id/zoom_layout"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			pull:header="@layout/imageview"
+			pull:maxHeaderHeight="350dp"
+			pull:minHeaderHeight="150dp"
+			>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="1000dp"
+				android:background="@android:color/holo_purple"
+				android:text="This this textview."
+				android:textSize="20sp"
+				android:textColor="@android:color/white"
+				android:gravity="top|center_horizontal"
+				android:paddingTop="30dp"
+				/>
+
+		</com.pulllayout.PullToZoomLayout>
+</LinearLayout>
+
