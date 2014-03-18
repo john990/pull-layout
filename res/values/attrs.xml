@@ -2,7 +2,7 @@
 <resources>
 	<declare-styleable name="pull">
 		<attr name="header" format="reference|integer" />
-		<attr name="maxHeight" format="reference|dimension" />
-		<attr name="minHeight" format="reference|dimension" />
+		<attr name="maxHeaderHeight" format="reference|dimension" />
+		<attr name="minHeaderHeight" format="reference|dimension" />
 	</declare-styleable>
 </resources>

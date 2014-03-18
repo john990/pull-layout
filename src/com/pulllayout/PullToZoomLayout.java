@@ -25,8 +25,8 @@ public class PullToZoomLayout extends PullToZoomBase {
         super(context, attrs);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.pull);
         int layout = a.getResourceId(R.styleable.pull_header, 0);
-        maxHeight = a.getLayoutDimension(R.styleable.pull_maxHeight, 0);
-        int minHeight = a.getLayoutDimension(R.styleable.pull_minHeight, 0);
+        maxHeight = a.getLayoutDimension(R.styleable.pull_maxHeaderHeight, 0);
+        int minHeight = a.getLayoutDimension(R.styleable.pull_minHeaderHeight, 0);
         a.recycle();
         if (layout == 0) {
             throw new RuntimeException("PullToZoomLayout haven't header view.");
@@ -40,7 +40,6 @@ public class PullToZoomLayout extends PullToZoomBase {
         headerHeight = getHeaderHeight();
         currentHeight = headerHeight;
         headerShowing = true;
-        setMaxMargin(0);
     }
 
 
