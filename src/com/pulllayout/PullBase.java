@@ -20,6 +20,7 @@ class PullBase extends LinearLayout{
 
     protected boolean headerShowing = false;
     private int currentHeaderMargin = 0;
+    private int maxMargin;
 
     protected boolean containAbsListView = false;
 
@@ -84,6 +85,10 @@ class PullBase extends LinearLayout{
         headerShowing = true;
     }
 
+    protected void setMaxMargin(int maxMargin){
+        this.maxMargin = maxMargin;
+    }
+
     public int getHeaderHeight() {
         return headerViewHeight;
     }
@@ -112,11 +117,14 @@ class PullBase extends LinearLayout{
     public final void adjustHeader(int margin, boolean up) {
         if (up) {
             currentHeaderMargin = currentHeaderMargin - margin;
-            if (currentHeaderMargin < -headerViewHeight) {
+            if (currentHeaderMargin < -headerViewHeight || Math.abs(currentHeaderMargin + headerViewHeight) < 20) {
                 currentHeaderMargin = -headerViewHeight;
             }
         } else {
             currentHeaderMargin = currentHeaderMargin + margin;
+            if(currentHeaderMargin > maxMargin || Math.abs(currentHeaderMargin) < 20){
+                currentHeaderMargin = maxMargin;
+            }
         }
         LayoutParams p = (LayoutParams) headerView.getLayoutParams();
         p.topMargin = currentHeaderMargin;
